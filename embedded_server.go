@@ -49,8 +49,25 @@ func LoadConfig(configFile string) (opts *server.Options) {
 	if err != nil {
 		panic(fmt.Sprintf("Error processing configuration file: %v", err))
 	}
-	opts.NoSigs, opts.NoLog = true, opts.LogFile == ""
 	return
+}
+
+func MergeOptions(base *server.Options, override *server.Options) (opts *server.Options) {
+	if base == nil && override == nil {
+		return nil
+	}
+	if base == nil {
+		return override
+	}
+	if override == nil {
+		return base
+	}
+	return server.MergeOptions(base, override)
+}
+
+func UpByOpts(opts *server.Options) (*server.Server, *server.Options) {
+	s := RunServer(opts)
+	return s, opts
 }
 
 func Up(configFile string) (s *server.Server, opts *server.Options) {
