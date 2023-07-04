@@ -2,7 +2,10 @@ package npoci
 
 import (
 	"fmt"
+	"testing"
 	"time"
+
+	"github.com/tbeets/poci"
 
 	"github.com/nats-io/nats-server/v2/server"
 )
@@ -74,4 +77,15 @@ func Up(configFile string) (s *server.Server, opts *server.Options) {
 	opts = LoadConfig(configFile)
 	s = RunServer(opts)
 	return
+}
+
+func CheckLeafNodeConnectedCount(t testing.TB, s *server.Server, lnCons int) {
+	t.Helper()
+	poci.CheckFor(t, 5*time.Second, 15*time.Millisecond, func() error {
+		if nln := s.NumLeafNodes(); nln != lnCons {
+			return fmt.Errorf("Expected %d connected leafnode(s) for server %v, got %d",
+				lnCons, s, nln)
+		}
+		return nil
+	})
 }
