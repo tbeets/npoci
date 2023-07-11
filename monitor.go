@@ -29,7 +29,9 @@ func httpMonitorGet(t *testing.T, httpHost string, httpPort int, path string) []
 	if resp.StatusCode != 200 {
 		t.Fatalf("Expected a 200 response, got %d\n", resp.StatusCode)
 	}
-	defer resp.Body.Close()
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		t.Fatalf("Got an error reading the body: %v\n", err)
@@ -51,6 +53,10 @@ func HttpMonitorGetVarz(t *testing.T, httpHost string, httpPort int, opts string
 	}
 	return &v
 }
+
+var (
+	_ = HttpMonitorGetVarz
+)
 
 // connz
 // subsz

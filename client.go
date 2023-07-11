@@ -18,3 +18,7 @@ func ClientConnect(t testing.TB, s *server.Server, opts ...nats.Option) *nats.Co
 
 	return nc
 }
+
+var (
+	_ = ClientConnect
+)

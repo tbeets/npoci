@@ -22,3 +22,7 @@ func JsClientConnect(t testing.TB, s *server.Server, opts ...nats.Option) (*nats
 	}
 	return nc, js
 }
+
+var (
+	_ = JsClientConnect
+)

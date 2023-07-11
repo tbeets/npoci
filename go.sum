@@ -17,6 +17,8 @@ github.com/tbeets/poci v0.0.0-20230213061523-ea600e60c5d1 h1:uQF65VChzU346BLO3rI
 github.com/tbeets/poci v0.0.0-20230213061523-ea600e60c5d1/go.mod h1:hC7tKRa3NsZLEi353QwCGa0aYjDcQqUrAbosleg4dj4=
 github.com/tbeets/poci v0.0.0-20230704163512-9491fecc1943 h1:Uj/yKcysvcmjTJaUflqm0pFb31U3keRUp89rGNR8ctk=
 github.com/tbeets/poci v0.0.0-20230704163512-9491fecc1943/go.mod h1:hC7tKRa3NsZLEi353QwCGa0aYjDcQqUrAbosleg4dj4=
+github.com/tbeets/poci v0.0.0-20230711215639-9f0ceefb443d h1:guw8nkTbxYPNeOb6iap0YTOnjOWHY6r/czHCBJHYP/A=
+github.com/tbeets/poci v0.0.0-20230711215639-9f0ceefb443d/go.mod h1:hC7tKRa3NsZLEi353QwCGa0aYjDcQqUrAbosleg4dj4=
 golang.org/x/crypto v0.0.0-20210314154223-e6e6c4f2bb5b/go.mod h1:T9bdIzuCu7OtxOm1hfPfRQxPLYneinmdGuTeoZ9dtd4=
 golang.org/x/crypto v0.5.0 h1:U/0M97KRkSFvyD/3FSmdP5W5swImpNgle/EHFhOsQPE=
 golang.org/x/crypto v0.5.0/go.mod h1:NK/OQwhpMQP3MwtdjgLlYHnH9ebylxKWv3e0fK+mkQU=

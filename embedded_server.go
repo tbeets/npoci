@@ -84,13 +84,20 @@ func Up(configFile string) (s *server.Server, opts *server.Options) {
 }
 
 // CheckLeafNodeConnectedCount checks that the server has the expected number of leaf node connections
-func CheckLeafNodeConnectedCount(t testing.TB, s *server.Server, lnCons int) {
+func CheckLeafNodeConnectedCount(t *testing.T, s *server.Server, lnCons int) {
 	t.Helper()
 	poci.CheckFor(t, 5*time.Second, 15*time.Millisecond, func() error {
 		if nln := s.NumLeafNodes(); nln != lnCons {
-			return fmt.Errorf("Expected %d connected leafnode(s) for server %v, got %d",
+			return fmt.Errorf("expected %d connected leafnode(s) for server %v, got %d",
 				lnCons, s, nln)
 		}
 		return nil
 	})
 }
+
+var (
+	_ = MergeOptions
+	_ = UpByOpts
+	_ = Up
+	_ = CheckLeafNodeConnectedCount
+)
