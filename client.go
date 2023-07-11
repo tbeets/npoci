@@ -1,11 +1,14 @@
 package npoci
 
 import (
+	"testing"
+
 	"github.com/nats-io/nats-server/v2/server"
 	"github.com/nats-io/nats.go"
-	"testing"
 )
 
+// ClientConnect creates a client connection from passed server reference taking optional options
+// e.g. user credentials nats.UserCredentials("path/to/creds") or nats.UserInfo("user", "password")
 func ClientConnect(t testing.TB, s *server.Server, opts ...nats.Option) *nats.Conn {
 	t.Helper()
 	nc, err := nats.Connect(s.ClientURL(), opts...)
