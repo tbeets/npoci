@@ -1,8 +1,13 @@
 package npoci
 
 import (
+	"encoding/json"
+	"fmt"
+	"strings"
 	"testing"
 	"time"
+
+	"github.com/tbeets/poci"
 
 	"github.com/nats-io/nats-server/v2/server"
 	"github.com/nats-io/nats.go"
@@ -10,7 +15,7 @@ import (
 
 // JsClientConnect creates a client connection and JetStream context from passed server reference taking optional options
 // e.g. user credentials nats.UserCredentials("path/to/creds") or nats.UserInfo("user", "password")
-func JsClientConnect(t testing.TB, s *server.Server, opts ...nats.Option) (*nats.Conn, nats.JetStreamContext) {
+func JsClientConnect(t *testing.T, s *server.Server, opts ...nats.Option) (*nats.Conn, nats.JetStreamContext) {
 	t.Helper()
 	nc, err := nats.Connect(s.ClientURL(), opts...)
 	if err != nil {
@@ -23,6 +28,38 @@ func JsClientConnect(t testing.TB, s *server.Server, opts ...nats.Option) (*nats
 	return nc, js
 }
 
+func GetJsStreamInfo(t *testing.T, nc *nats.Conn, stream string, apiPrefix string) *server.StreamInfo {
+	t.Helper()
+	apiDest := fmt.Sprintf("%s%s", apiPrefix, fmt.Sprintf(server.JSApiStreamInfoT, stream))
+	if apiPrefix != "" {
+		apiDest = strings.Replace(apiDest, "$JS.API", apiPrefix, 1)
+	}
+	rmsg, err := nc.Request(apiDest, []byte("{}"), 2*time.Second)
+	poci.RequireNoError(t, err)
+	respSi := server.JSApiStreamInfoResponse{}
+	err = json.Unmarshal(rmsg.Data, &respSi)
+	poci.RequireNoError(t, err)
+	poci.RequireTrue(t, respSi.Error == nil)
+	return respSi.StreamInfo
+}
+
+func GetJsConsumerInfo(t *testing.T, nc *nats.Conn, stream string, consumer string, apiPrefix string) *server.ConsumerInfo {
+	t.Helper()
+	apiDest := fmt.Sprintf("%s%s", apiPrefix, fmt.Sprintf(server.JSApiConsumerInfoT, stream, consumer))
+	if apiPrefix != "" {
+		apiDest = strings.Replace(apiDest, "$JS.API", apiPrefix, 1)
+	}
+	rmsg, err := nc.Request(apiDest, []byte("{}"), 2*time.Second)
+	poci.RequireNoError(t, err)
+	respCi := server.JSApiConsumerInfoResponse{}
+	err = json.Unmarshal(rmsg.Data, &respCi)
+	poci.RequireNoError(t, err)
+	poci.RequireTrue(t, respCi.Error == nil)
+	return respCi.ConsumerInfo
+}
+
 var (
 	_ = JsClientConnect
+	_ = GetJsStreamInfo
+	_ = GetJsConsumerInfo
 )
