@@ -31,7 +31,7 @@ func JsClientConnect(t *testing.T, s *server.Server, opts ...nats.Option) (*nats
 
 func GetJsStreamInfo(t *testing.T, nc *nats.Conn, stream string, apiPrefix string) *server.StreamInfo {
 	t.Helper()
-	apiDest := fmt.Sprintf("%s%s", apiPrefix, fmt.Sprintf(server.JSApiStreamInfoT, stream))
+	apiDest := fmt.Sprintf(server.JSApiStreamInfoT, stream)
 	if apiPrefix != "" {
 		apiDest = strings.Replace(apiDest, "$JS.API", apiPrefix, 1)
 	}
@@ -53,7 +53,7 @@ func JsCreateStreamFromFile(t *testing.T, nc *nats.Conn, stream string, apiPrefi
 
 func JsCreateStream(t *testing.T, nc *nats.Conn, stream string, apiPrefix string, jsReq []byte) {
 	t.Helper()
-	apiDest := fmt.Sprintf("%s%s", apiPrefix, fmt.Sprintf(server.JSApiStreamCreateT, stream))
+	apiDest := fmt.Sprintf(server.JSApiStreamCreateT, stream)
 	if apiPrefix != "" {
 		apiDest = strings.Replace(apiDest, "$JS.API", apiPrefix, 1)
 	}
@@ -67,7 +67,7 @@ func JsCreateStream(t *testing.T, nc *nats.Conn, stream string, apiPrefix string
 
 func GetJsConsumerInfo(t *testing.T, nc *nats.Conn, stream string, consumer string, apiPrefix string) *server.ConsumerInfo {
 	t.Helper()
-	apiDest := fmt.Sprintf("%s%s", apiPrefix, fmt.Sprintf(server.JSApiConsumerInfoT, stream, consumer))
+	apiDest := fmt.Sprintf(server.JSApiConsumerInfoT, stream, consumer)
 	if apiPrefix != "" {
 		apiDest = strings.Replace(apiDest, "$JS.API", apiPrefix, 1)
 	}
