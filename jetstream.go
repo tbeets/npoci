@@ -3,6 +3,7 @@ package npoci
 import (
 	"encoding/json"
 	"fmt"
+	"os"
 	"strings"
 	"testing"
 	"time"
@@ -43,6 +44,27 @@ func GetJsStreamInfo(t *testing.T, nc *nats.Conn, stream string, apiPrefix strin
 	return respSi.StreamInfo
 }
 
+func JsCreateStreamFromFile(t *testing.T, nc *nats.Conn, stream string, apiPrefix string, jsReqFile string) {
+	t.Helper()
+	jsReq, err := os.ReadFile(jsReqFile)
+	poci.RequireNoError(t, err)
+	JsCreateStream(t, nc, stream, apiPrefix, jsReq)
+}
+
+func JsCreateStream(t *testing.T, nc *nats.Conn, stream string, apiPrefix string, jsReq []byte) {
+	t.Helper()
+	apiDest := fmt.Sprintf("%s%s", apiPrefix, fmt.Sprintf(server.JSApiStreamCreateT, stream))
+	if apiPrefix != "" {
+		apiDest = strings.Replace(apiDest, "$JS.API", apiPrefix, 1)
+	}
+	rmsg, err := nc.Request(apiDest, jsReq, 2*time.Second)
+	poci.RequireNoError(t, err)
+	respC := server.JSApiStreamCreateResponse{}
+	err = json.Unmarshal(rmsg.Data, &respC)
+	poci.RequireNoError(t, err)
+	poci.RequireTrue(t, respC.Error == nil)
+}
+
 func GetJsConsumerInfo(t *testing.T, nc *nats.Conn, stream string, consumer string, apiPrefix string) *server.ConsumerInfo {
 	t.Helper()
 	apiDest := fmt.Sprintf("%s%s", apiPrefix, fmt.Sprintf(server.JSApiConsumerInfoT, stream, consumer))
@@ -62,4 +84,6 @@ var (
 	_ = JsClientConnect
 	_ = GetJsStreamInfo
 	_ = GetJsConsumerInfo
+	_ = JsCreateStream
+	_ = JsCreateStreamFromFile
 )
