@@ -3,7 +3,7 @@ module github.com/tbeets/npoci
 go 1.19
 
 require (
-	github.com/nats-io/nats-server/v2 v2.9.21
+	github.com/nats-io/nats-server/v2 v2.9.22-0.20230807161848-6ca788799294
 	github.com/nats-io/nats.go v1.28.0
 	github.com/tbeets/poci v0.0.0-20230711215639-9f0ceefb443d
 	golang.org/x/crypto v0.12.0
