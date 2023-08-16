@@ -40,6 +40,9 @@ func GetJsStreamInfo(t *testing.T, nc *nats.Conn, stream string, apiPrefix strin
 	respSi := server.JSApiStreamInfoResponse{}
 	err = json.Unmarshal(rmsg.Data, &respSi)
 	poci.RequireNoError(t, err)
+	if respSi.Error != nil {
+		t.Logf("Response Error: %v", respSi.Error)
+	}
 	poci.RequireTrue(t, respSi.Error == nil)
 	return respSi.StreamInfo
 }
@@ -62,6 +65,9 @@ func JsCreateStream(t *testing.T, nc *nats.Conn, stream string, apiPrefix string
 	respC := server.JSApiStreamCreateResponse{}
 	err = json.Unmarshal(rmsg.Data, &respC)
 	poci.RequireNoError(t, err)
+	if respC.Error != nil {
+		t.Logf("Response error: %v", respC.Error)
+	}
 	poci.RequireTrue(t, respC.Error == nil)
 }
 
@@ -76,6 +82,9 @@ func GetJsConsumerInfo(t *testing.T, nc *nats.Conn, stream string, consumer stri
 	respCi := server.JSApiConsumerInfoResponse{}
 	err = json.Unmarshal(rmsg.Data, &respCi)
 	poci.RequireNoError(t, err)
+	if respCi.Error != nil {
+		t.Logf("Response Error: %v", respCi.Error)
+	}
 	poci.RequireTrue(t, respCi.Error == nil)
 	return respCi.ConsumerInfo
 }
