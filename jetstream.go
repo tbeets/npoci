@@ -66,7 +66,13 @@ func JsCreateStream(t *testing.T, nc *nats.Conn, stream string, apiPrefix string
 	err = json.Unmarshal(rmsg.Data, &respC)
 	poci.RequireNoError(t, err)
 	if respC.Error != nil {
-		t.Logf("Response error: %v", respC.Error)
+		t.Logf("Response error (will retry once): %v", respC.Error)
+		time.Sleep(1500 * time.Millisecond)
+		rmsg, err := nc.Request(apiDest, jsReq, 2*time.Second)
+		poci.RequireNoError(t, err)
+		respC := server.JSApiStreamCreateResponse{}
+		err = json.Unmarshal(rmsg.Data, &respC)
+		poci.RequireNoError(t, err)
 	}
 	poci.RequireTrue(t, respC.Error == nil)
 }
